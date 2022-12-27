@@ -5,7 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.commit.crudroommvvm.room.Note
+import kotlinx.android.synthetic.main.activity_edit.*
 import kotlinx.android.synthetic.main.adapter_note.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class NoteAdapter(private val note: ArrayList<Note>, private val listener: OnAdapterListener) :
     RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
@@ -28,8 +32,7 @@ class NoteAdapter(private val note: ArrayList<Note>, private val listener: OnAda
             listener.onUpdate(note)
         }
         holder.view.icon_delete.setOnClickListener {
-
-
+            listener.onDelete(note)
         }
     }
 
@@ -46,5 +49,6 @@ class NoteAdapter(private val note: ArrayList<Note>, private val listener: OnAda
     interface OnAdapterListener {
         fun onClick(note: Note)
         fun onUpdate(note: Note)
+        fun onDelete(note: Note)
     }
 }

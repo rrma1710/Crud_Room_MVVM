@@ -9,6 +9,7 @@ import com.commit.crudroommvvm.databinding.ActivityMainBinding
 import com.commit.crudroommvvm.room.Constant
 import com.commit.crudroommvvm.room.Note
 import com.commit.crudroommvvm.room.NoteDB
+import kotlinx.android.synthetic.main.activity_edit.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,6 +40,13 @@ class MainActivity : AppCompatActivity() {
             override fun onUpdate(note: Note) {
                 intentEdit(note.id,Constant.TYPE_UPDATE)
             }
+
+            override fun onDelete(note: Note) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    db.noteDao().deleteNote(note)
+                    loadNote()
+                }
+            }
         })
         binding.listNote.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -54,6 +62,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        loadNote()
+    }
+
+    fun loadNote(){
         CoroutineScope(Dispatchers.IO).launch {
             val notes = db.noteDao().getNotes()
             Log.d("MainActivity", "dbResponse : $notes")

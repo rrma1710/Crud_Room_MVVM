@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onUpdate(note: Note) {
-                TODO("Not yet implemented")
+                intentEdit(note.id,Constant.TYPE_UPDATE)
             }
         })
         binding.listNote.apply {

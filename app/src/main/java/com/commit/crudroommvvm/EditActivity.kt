@@ -57,6 +57,14 @@ class EditActivity : AppCompatActivity() {
                 finish()
             }
         }
+        binding.buttonUpdate.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                db.noteDao().updateNote(
+                    Note(noteId, binding.editTitle.text.toString(), binding.editNote.text.toString())
+                )
+                finish()
+            }
+        }
     }
 
     fun getNote() {

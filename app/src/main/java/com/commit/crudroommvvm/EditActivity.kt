@@ -28,6 +28,8 @@ class EditActivity : AppCompatActivity() {
     }
 
     fun setupView() {
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
         val intentType = intent.getIntExtra("intent_type", 0)
         when (intentType) {
             Constant.TYPE_CREATE -> {
@@ -58,5 +60,10 @@ class EditActivity : AppCompatActivity() {
             edit_title.setText(notes.title)
             edit_note.setText(notes.note)
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
     }
 }

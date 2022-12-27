@@ -1,11 +1,14 @@
 package com.commit.crudroommvvm
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.commit.crudroommvvm.databinding.ActivityEditBinding
+import com.commit.crudroommvvm.room.Constant
 import com.commit.crudroommvvm.room.Note
 import com.commit.crudroommvvm.room.NoteDB
+import kotlinx.android.synthetic.main.activity_edit.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,9 +23,22 @@ class EditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setupView()
         setupListener()
         noteId = intent.getIntExtra("intent_id", 0)
         Toast.makeText(this, noteId.toString(), Toast.LENGTH_SHORT).show()
+    }
+
+    fun setupView() {
+        val intentType = intent.getIntExtra("intent_type", 0)
+        when (intentType) {
+            Constant.TYPE_CREATE -> {
+
+            }
+            Constant.TYPE_READ -> {
+                button_save.visibility = View.GONE
+            }
+        }
     }
 
     private fun setupListener() {

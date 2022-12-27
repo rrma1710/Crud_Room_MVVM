@@ -1,5 +1,6 @@
 package com.commit.crudroommvvm
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,7 +10,6 @@ import com.commit.crudroommvvm.databinding.ActivityMainBinding
 import com.commit.crudroommvvm.room.Constant
 import com.commit.crudroommvvm.room.Note
 import com.commit.crudroommvvm.room.NoteDB
-import kotlinx.android.synthetic.main.activity_edit.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,18 +34,15 @@ class MainActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         noteAdapter = NoteAdapter(arrayListOf(), object : NoteAdapter.OnAdapterListener {
             override fun onClick(note: Note) {
-                intentEdit(note.id,Constant.TYPE_READ)
+                intentEdit(note.id, Constant.TYPE_READ)
             }
 
             override fun onUpdate(note: Note) {
-                intentEdit(note.id,Constant.TYPE_UPDATE)
+                intentEdit(note.id, Constant.TYPE_UPDATE)
             }
 
             override fun onDelete(note: Note) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    db.noteDao().deleteNote(note)
-                    loadNote()
-                }
+               deleteDialogItem(note)
             }
         })
         binding.listNote.apply {
@@ -56,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupListener() {
         binding.buttonCreate.setOnClickListener {
-            intentEdit(0,Constant.TYPE_CREATE)
+            intentEdit(0, Constant.TYPE_CREATE)
         }
     }
 
@@ -65,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         loadNote()
     }
 
-    fun loadNote(){
+    fun loadNote() {
         CoroutineScope(Dispatchers.IO).launch {
             val notes = db.noteDao().getNotes()
             Log.d("MainActivity", "dbResponse : $notes")
@@ -79,9 +76,30 @@ class MainActivity : AppCompatActivity() {
         startActivity(
             Intent(
                 applicationContext,
-                EditActivity::class.java)
+                EditActivity::class.java
+            )
                 .putExtra("intent_id", noteId)
                 .putExtra("intent_type", intentType)
         )
+    }
+
+    fun deleteDialogItem(note: Note) {
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.apply {
+            setTitle("Konfirmasi")
+            setMessage("Apakah mau hapus ${note.title} ini?")
+            setPositiveButton("Hapus") { dialog, _ ->
+                dialog.dismiss()
+                CoroutineScope(Dispatchers.IO).launch {
+                    db.noteDao().deleteNote(note)
+                    loadNote()
+                }
+            }
+            setNegativeButton("Tidak") { dialog, _ ->
+                dialog.dismiss()
+
+            }
+        }
+        alertDialog.show()
     }
 }

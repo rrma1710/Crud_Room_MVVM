@@ -1,11 +1,11 @@
 package com.commit.crudroommvvm
 
+import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.commit.crudroommvvm.room.Note
-import kotlinx.android.synthetic.main.activity_edit.*
 import kotlinx.android.synthetic.main.adapter_note.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -35,6 +35,10 @@ class MainActivity : AppCompatActivity() {
             override fun onClick(note: Note) {
                 intentEdit(note.id,Constant.TYPE_READ)
             }
+
+            override fun onUpdate(note: Note) {
+                TODO("Not yet implemented")
+            }
         })
         binding.listNote.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
